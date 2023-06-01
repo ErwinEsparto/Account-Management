@@ -1,75 +1,126 @@
 ﻿using System;
 using System.Collections.Generic;
 using AM_Rules;
+using AM_Models;
 
 namespace AM_UI
 {
-    public class Program
+    internal class Program
     {
         public static void Main(string[] args)
         {
-            List<string> options = new List<string>()
-            {"Welcome. Are you a...?", "[1]STUDENT", "[2]TEACHER", "[3]ADMIN", "[0]EXIT"};
-            List<string> forms = new List<string>()
-            {"\n[1]Login", "[2]Sign Up", "[3]Forgot Password"};
+            LoginRules login = new LoginRules();
+            RegisterRules register = new RegisterRules();
+            SISAccount account;
+            SISType accountType;
+            int status;
+            string ifSuccess;
 
-
-            int status = ShowOptions();
-            if (status == 1)
+            do
             {
-                int action = showForm();
-
-            }
-            else if (status == 2)
-            {
-                int action = showForm();
-
-            }
-            if (status == 3)
-            {
-                adminLogin();
-            }
+                status = ShowOptions();
+                switch (status)
+                {
+                    case 0: break;
+                    case 1:
+                    case 2:
+                        int action = ShowForm();
+                        switch (action)
+                        {
+                            case 1:
+                                ifSuccess = Login(status);
+                                Console.WriteLine(ifSuccess);
+                                break;
+                            case 2:
+                                Register(status);
+                                break;
+                            case 3:
+                                //Forgot Password
+                                break;
+                            default:
+                                Console.WriteLine("Incorrent Input.");
+                                break;
+                        }
+                        break;
+                    case 3:
+                        ifSuccess = Login(status);
+                        Console.WriteLine(ifSuccess);
+                        break;
+                    default:
+                        Console.WriteLine("Incorrect input.");
+                        break;
+                }
+            } while (status != 0);
 
             int ShowOptions()
             {
-                foreach (string option in options)
-                {
-                    Console.WriteLine(option);
-                }
+                Console.Write("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+                Console.WriteLine("Welcome. Are you a...?");
+                Console.WriteLine("[1]STUDENT");
+                Console.WriteLine("[2]TEACHER");
+                Console.WriteLine("[3]ADMIN");
+                Console.WriteLine("[0]EXIT");
                 Console.Write("Input: ");
-                int num = Convert.ToInt32(Console.ReadLine());
-                return num;
+                return Convert.ToInt32(Console.ReadLine());
             }
-
-            int showForm()
+            int ShowForm()
             {
-                foreach (string form in forms)
-                {
-                    Console.WriteLine(form);
-                }
+                Console.WriteLine("\nPlease choose an action: ");
+                Console.WriteLine("[1]Login");
+                Console.WriteLine("[2]Sign Up");
+                Console.WriteLine("[3]Forgot Password");
                 Console.Write("Input: ");
-                int num = Convert.ToInt32(Console.ReadLine());
-                return num;
-
+                return Convert.ToInt32(Console.ReadLine());
             }
-
-            void adminLogin()
+            string Login(int type)
             {
-                AdminRules r = new AdminRules();
-                Console.Write("\nType your email: ");
-                string adminEmail = Console.ReadLine();
-                Console.Write("Type your password: ");
-                string adminPass = Console.ReadLine();
-                bool check = r.checkAdminAccount(adminEmail, adminPass);
-
-                if (check == true)
-                {
-                    Console.WriteLine("Successful Login.");
-                }
+                if (type == 1)
+                { accountType = SISType.Student; }
+                else if (type == 2)
+                { accountType = SISType.Faculty; }
                 else
+                { accountType = SISType.Admin; }
+
+                Console.WriteLine("\nEnter the following information: ");
+                Console.Write("Account number: ");
+                string username = Console.ReadLine();
+                Console.Write("Password: ");
+                string password = Console.ReadLine();
+                account = login.Login(username, password, accountType);
+
+                if (account != null)
+                { return "Successful Login."; }
+                else
+                { return "Incorrect Credentials."; }
+            }
+            void Register(int type)
+            {
+                string username, password, email;
+                bool format;
+                Console.WriteLine("\nCreating new account...");
+
+                if (type == 1)
+                { accountType = SISType.Student; }
+                else
+                { accountType = SISType.Faculty; }
+
+                do
                 {
-                    Console.WriteLine("Incorrect credentials.");
-                }
+                    Console.Write("Account number: ");
+                    username = Console.ReadLine();
+                    format = register.CheckFormat(username, accountType);
+                    if (format == false) { Console.WriteLine("Incorrect Account Number format."); }
+                } while (format == false);
+
+                Console.Write("Email address: ");
+                email = Console.ReadLine();
+                Console.Write("Password: ");
+                password = Console.ReadLine();
+                
+                register.CreateAccount(username, email, password, accountType);
+                Console.WriteLine("Successfully Registered.");
             }
         }
     }
