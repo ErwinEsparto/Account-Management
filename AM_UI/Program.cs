@@ -5,132 +5,122 @@ using AM_Models;
 
 namespace AM_UI
 {
-    public class Program
+    internal class Program
     {
         public static void Main(string[] args)
         {
+            LoginRules login = new LoginRules();
+            RegisterRules register = new RegisterRules();
+            SISAccount account;
+            SISType accountType;
             int status;
+            string ifSuccess;
+
             do
             {
                 status = ShowOptions();
-                if (status == 0) { break; }
-                if (status < 3 && status > 0)
-                { int action = showForm();
-                    if (action == 1)
-                    {
-                        string ifSuccess = Login(status);
-                        Console.WriteLine(ifSuccess);
-                        if (ifSuccess == "Successful Login.") { break; }
-                    }
-                    else if (action == 2)
-                    {
-                        registerAccount(status);
-                    }
-                    else if (action == 3)
-                    {
-
-                    }
-                    else
-                    { Console.WriteLine("Incorrect input."); }
-                }
-                else if (status == 3)
+                switch (status)
                 {
-                    string ifSuccess = Login(status);
-                    Console.WriteLine(ifSuccess);
-                    if (ifSuccess == "Successful Login.") { break; }
+                    case 0: break;
+                    case 1:
+                    case 2:
+                        int action = ShowForm();
+                        switch (action)
+                        {
+                            case 1:
+                                ifSuccess = Login(status);
+                                Console.WriteLine(ifSuccess);
+                                break;
+                            case 2:
+                                Register(status);
+                                break;
+                            case 3:
+                                //Forgot Password
+                                break;
+                            default:
+                                Console.WriteLine("Incorrent Input.");
+                                break;
+                        }
+                        break;
+                    case 3:
+                        ifSuccess = Login(status);
+                        Console.WriteLine(ifSuccess);
+                        break;
+                    default:
+                        Console.WriteLine("Incorrect input.");
+                        break;
                 }
-                else { Console.WriteLine("Incorrent Input."); }
             } while (status != 0);
 
             int ShowOptions()
             {
-                Console.WriteLine("\nWelcome. Are you a...?");
+                Console.Write("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+                Console.WriteLine("Welcome. Are you a...?");
                 Console.WriteLine("[1]STUDENT");
                 Console.WriteLine("[2]TEACHER");
                 Console.WriteLine("[3]ADMIN");
                 Console.WriteLine("[0]EXIT");
                 Console.Write("Input: ");
-                int num = Convert.ToInt32(Console.ReadLine());
-                return num;
+                return Convert.ToInt32(Console.ReadLine());
             }
-
-            int showForm()
+            int ShowForm()
             {
-                Console.WriteLine("\n[1]Login");
+                Console.WriteLine("\nPlease choose an action: ");
+                Console.WriteLine("[1]Login");
                 Console.WriteLine("[2]Sign Up");
                 Console.WriteLine("[3]Forgot Password");
                 Console.Write("Input: ");
-                int num = Convert.ToInt32(Console.ReadLine());
-                return num;
-
+                return Convert.ToInt32(Console.ReadLine());
             }
-
             string Login(int type)
             {
-                LoginRules rules = new LoginRules();
-                string? username;
-                SISType acctype;
                 if (type == 1)
-                {
-                    acctype = SISType.Student;
-                    Console.Write("\nType your student number: ");
-                    username = Console.ReadLine();
-                }
+                { accountType = SISType.Student; }
                 else if (type == 2)
-                {
-                    acctype = SISType.Faculty;
-                    Console.Write("\nType your faculty number: ");
-                    username = Console.ReadLine();
-                }
+                { accountType = SISType.Faculty; }
                 else
-                {
-                    acctype = SISType.Admin;
-                    Console.Write("\nType your username: ");
-                    username = Console.ReadLine();
-                }
-                Console.Write("Type your password: ");
-                string? password = Console.ReadLine();
-                SISAccount? account = rules.Login(username, password, acctype);
+                { accountType = SISType.Admin; }
+
+                Console.WriteLine("\nEnter the following information: ");
+                Console.Write("Account number: ");
+                string username = Console.ReadLine();
+                Console.Write("Password: ");
+                string password = Console.ReadLine();
+                account = login.Login(username, password, accountType);
 
                 if (account != null)
                 { return "Successful Login."; }
                 else
                 { return "Incorrect Credentials."; }
             }
-            void registerAccount(int type)
+            void Register(int type)
             {
-                LoginRules rules = new LoginRules();
-                string? username, password, email;
-                SISType acctype;
+                string username, password, email;
                 bool format;
                 Console.WriteLine("\nCreating new account...");
 
+                if (type == 1)
+                { accountType = SISType.Student; }
+                else
+                { accountType = SISType.Faculty; }
+
                 do
                 {
-                    if (type == 1)
-                    {
-                        acctype = SISType.Student;
-                        Console.Write("Type your student number: ");
-                        username = Console.ReadLine();
-                        format = rules.checkFormat(username, acctype);
-                        if (format == false) { Console.WriteLine("Incorrect format."); }
-                    }
-                    else
-                    {
-                        acctype = SISType.Faculty;
-                        Console.Write("Type your faculty number: ");
-                        username = Console.ReadLine();
-                        format = rules.checkFormat(username, acctype);
-                        if (format == false) { Console.WriteLine("Incorrect format."); }
-                    }
+                    Console.Write("Account number: ");
+                    username = Console.ReadLine();
+                    format = register.CheckFormat(username, accountType);
+                    if (format == false) { Console.WriteLine("Incorrect Account Number format."); }
                 } while (format == false);
 
-                Console.Write("Type your email address: ");
+                Console.Write("Email address: ");
                 email = Console.ReadLine();
-                Console.Write("Type your password: ");
+                Console.Write("Password: ");
                 password = Console.ReadLine();
+                
+                register.CreateAccount(username, email, password, accountType);
                 Console.WriteLine("Successfully Registered.");
-                rules.createAccount(username, password, email, acctype);
             }
         }
     }

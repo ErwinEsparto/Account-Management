@@ -15,11 +15,11 @@ namespace AM_Data
         private void CreateProfileAccounts()
         {
 
-            InMemorySISData sisData = new InMemorySISData();
+            SISAccountDataService sisdata = new SISAccountDataService();
 
             ProfileAccount profile1 = new ProfileAccount
             {
-                SISAccount = sisData.GetSISAccountByNumber("2011-00066-BN-0"),
+                SISAccount = sisdata.GetSISAccountByNumber("2011-00066-BN-0"),
                 Username = "indaleenq",
                 DateJoined = DateTime.Now,
                 DateModified = DateTime.Now,
@@ -28,7 +28,7 @@ namespace AM_Data
 
             ProfileAccount profile2 = new ProfileAccount
             {
-                SISAccount = sisData.GetSISAccountByNumber("2011-00077-BN-0"),
+                SISAccount = sisdata.GetSISAccountByNumber("2011-00077-BN-0"),
                 Username = "indaleen",
                 DateJoined = DateTime.Now,
                 DateModified = DateTime.Now,
@@ -37,7 +37,7 @@ namespace AM_Data
 
             ProfileAccount profile3 = new ProfileAccount
             {
-                SISAccount = sisData.GetSISAccountByNumber("2011-00088-BN-0"),
+                SISAccount = sisdata.GetSISAccountByNumber("2011-00088-BN-0"),
                 Username = "inquinsayas",
                 DateJoined = DateTime.Now,
                 DateModified = DateTime.Now,

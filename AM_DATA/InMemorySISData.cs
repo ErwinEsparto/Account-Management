@@ -7,15 +7,11 @@ namespace AM_Data
         private List<SISAccount> SISAccounts = new List<SISAccount>();
 
         public InMemorySISData()
-        { createAccounts(); }
+        { CreateAccounts(); }
 
-        public void AddAccount(SISAccount account)
-        { SISAccounts.Add(account); }
-
-        public List<SISAccount> getList()
+        public List<SISAccount> GetList()
         { return SISAccounts; }
-
-        private void createAccounts()
+        private void CreateAccounts()
         {
             SISAccount admin1 = new SISAccount
             {
@@ -79,15 +75,6 @@ namespace AM_Data
             SISAccounts.Add(admin4);
             SISAccounts.Add(student1);
             SISAccounts.Add(faculty1);
-        }
-        public SISAccount GetSISAccountByNumber(string sisNumber)
-        {
-            foreach (var account in SISAccounts)
-            {
-                if (account.SISAccountNumber == sisNumber)
-                { return account; }
-            }
-            return new SISAccount();
         }
     }
 }
