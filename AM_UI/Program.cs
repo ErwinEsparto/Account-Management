@@ -11,6 +11,7 @@ namespace AM_UI
         {
             LoginRules login = new LoginRules();
             RegisterRules register = new RegisterRules();
+            RecoverRules recover = new RecoverRules();
             SISAccount account;
             SISType accountType;
             int status;
@@ -35,7 +36,8 @@ namespace AM_UI
                                 Register(status);
                                 break;
                             case 3:
-                                //Forgot Password
+                                ifSuccess = Recover();
+                                Console.WriteLine(ifSuccess);
                                 break;
                             default:
                                 Console.WriteLine("Incorrent Input.");
@@ -121,6 +123,29 @@ namespace AM_UI
                 
                 register.CreateAccount(username, email, password, accountType);
                 Console.WriteLine("Successfully Registered.");
+            }
+            string Recover()
+            {
+                Console.WriteLine("\nRecovering Account...");
+                Console.Write("Please enter your email: ");
+                string email = Console.ReadLine();
+                account = recover.FindAccountByEmail(email);
+
+                if (account != null)
+                {
+                    Console.WriteLine("\nAccount Found!");
+                    Console.Write("Type your new password: ");
+                    string newPassword = Console.ReadLine();
+                    Console.Write("Type your new password again: ");
+                    string newPassword2 = Console.ReadLine();
+                    bool result = recover.RecoverSISAccountByEmail(email, newPassword, newPassword2);
+                    
+                    if(result == true)
+                    { return "Successfully recovered your account."; }
+                    else { return "Password are not the same."; }
+                }
+                else
+                { return "Account not found."; }
             }
         }
     }
