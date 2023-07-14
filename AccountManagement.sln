@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM_Data", "AM_DATA\AM_Data.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM_Rules", "AM_Rules\AM_Rules.csproj", "{EDC4FF05-3E89-44C3-BFF6-BA9CAC78B66E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AM_Models", "AM_Models\AM_Models.csproj", "{C20C8967-443D-4AAA-86BD-4C7E81BE11CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM_Models", "AM_Models\AM_Models.csproj", "{C20C8967-443D-4AAA-86BD-4C7E81BE11CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

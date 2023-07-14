@@ -11,8 +11,10 @@ namespace AM_Data
         {
             return Accounts;
         }
+
         public void AddAccount(SISAccount newAccount)
         { Accounts.Add(newAccount); }
+
         public SISAccount GetSISAccountByNumber(string sisNumber)
         {
             foreach (var account in Accounts)
