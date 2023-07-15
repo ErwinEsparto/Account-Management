@@ -1,79 +1,30 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Data.SqlClient;
-//using Microsoft.Data.SqlClient;
-//using AM_Models;
-
-//namespace AM_Data
-//{
-//    public class SQLData : IAccountData
-//    {
-//            static string connectionString = "Server=localhost;Database=Account;Trusted_Connection=True;";
-
-//            static SqlConnection sqlConnection;
-
-//        public SISAccountDataService sisAccountDataService = new SISAccountDataService();
-
-//        SQLData() { sqlConnection = new SqlConnection(connectionString); }
-
-//        public List<SISAccount> GetAccounts() 
-//        {
-//            String selectStatement = "SELECT SISAccount, SISPassword FROM Account";
-
-//            SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
-//            sqlConnection.Open();
-//            SqlDataReader reader = selectCommand.ExecuteReader();
-
-//            var SISAccounts = new List<SISAccount>();
-
-//            while (reader.Read())
-//            {
-//                SISAccounts.Add(new SISAccount
-//                {
-//                    EmailAddress = sisAccountDataService.GetSISAccountByNumber(reader["SISAccount"].ToString()),
-//                    Password = reader["SISPassword"].ToString()
-//                });
-//            }
-
-//            sqlConnection.Close();
-//            return SISAccounts;
-//           ; 
-//        }
-//        public void SaveAccounts(List<SISAccount> Accounts) { }
-//        public void UpdateAccounts(SISAccount Account) { }
-//    }
-//}
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using Microsoft.Data.SqlClient;
 using AM_Models;
 
 namespace AM_Data
 {
     public class SQLData : IAccountData
     {
-        static string connectionString = "Server=localhost;Database=Account;Trusted_Connection=True;";
+        static string connectionString = "Data Source=DESKTOP-C0CK3NP\\SQLEXPRESS; Initial Catalog = Accounts; Integrated Security = True;";
 
         static SqlConnection sqlConnection;
 
-        public SISAccountDataService sisAccountDataService = new SISAccountDataService();
+        //public SISAccountDataService sisAccountDataService = new SISAccountDataService();
 
-        SQLData()
+        public SQLData()
         {
             sqlConnection = new SqlConnection(connectionString);
         }
 
 
-        public List<SISAccount> GetAccounts()
+        public List<SISAccount> GetAccount()
         {
-            var selectStatement = "SELECT SISAccount, SISEmail, SISPassword FROM Account";
+            var selectStatement = "SELECT * FROM Account";
 
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
             sqlConnection.Open();
@@ -88,9 +39,11 @@ namespace AM_Data
                     SISAccountNumber = reader["SISAccount"].ToString(),
                     EmailAddress = reader["SISEmail"].ToString(),
                     Password = reader["SISPassword"].ToString(),
-                    DateCreated = DateTime.Now,
-                    DateModified = DateTime.Now,
-                    //Type =/* DateTime.Now,*/ reader["AccountType"].GetType()
+                    DateCreated = Convert.ToDateTime(reader["SISDateCreated"]),
+                    DateModified = Convert.ToDateTime(reader["SISDataModified"]),
+              
+                    //Type = Enum.Parse(SISType, reader["SISPassword"].ToString()),
+                    //Type = reader["AccountType"].ToString(),
                 });
             }
 

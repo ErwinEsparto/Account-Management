@@ -5,7 +5,12 @@ namespace AM_Rules
 {
     public class LoginRules
     {
-        SISAccountDataService sisdata = new SISAccountDataService();
+        public SISAccountDataService sisdata;
+        public LoginRules()
+        {
+            sisdata = new SISAccountDataService(new SQLData());
+        }
+
 
         public SISAccount Login(string username, string password, SISType type)
         {
@@ -45,3 +50,4 @@ namespace AM_Rules
         }
     }
 }
+

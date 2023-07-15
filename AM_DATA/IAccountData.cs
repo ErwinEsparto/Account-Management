@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace AM_Data
 {
-    internal interface IAccountData
+    public interface IAccountData
     {
-        List<SISAccount> GetAccounts();
+        List<SISAccount> GetAccount();
         void SaveAccounts(SISAccount Accounts);
         void UpdateAccounts(SISAccount Account);
     }
