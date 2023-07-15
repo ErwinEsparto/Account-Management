@@ -8,7 +8,7 @@ namespace AM_Rules
         private SISAccountDataService sisdata;
 
         public LoginRules()
-        { sisdata = new SISAccountDataService(); }
+        { sisdata = new SISAccountDataService(new SQLData()); }
 
         public SISAccount Login(string username, string password, SISType type)
         {

@@ -7,9 +7,8 @@ namespace AM_Rules
     {
         public SISAccountDataService sisdata;
         public RegisterRules()
-        {
-            sisdata = new SISAccountDataService(new SQLData());
-        }
+        { sisdata = new SISAccountDataService(new SQLData()); }
+
         public void CreateAccount(string username, string email, string password, SISType accountType)
         {
             SISAccount account = new SISAccount()

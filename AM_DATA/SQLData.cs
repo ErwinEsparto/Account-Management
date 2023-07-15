@@ -74,17 +74,14 @@ namespace AM_Data
             sqlConnection.Close();
         }
 
-
-
-
         public void UpdateAccounts(SISAccount Account) 
         {
             sqlConnection.Open();
 
-            var updateStatement = $"UPDATE SISAccount SET Points = @Points WHERE StudentNumber = @StudentNumber";
+            var updateStatement = $"UPDATE SISAccount SET SISPassword = @SISPassword WHERE SISEmail = @SISEmail";
             SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
-            updateCommand.Parameters.AddWithValue("@Password", Account.Password);
-            updateCommand.Parameters.AddWithValue("@StudentNumber", Account.SISAccountNumber);
+            updateCommand.Parameters.AddWithValue("@SISPassword", Account.Password);
+            updateCommand.Parameters.AddWithValue("@SISSEmail", Account.EmailAddress);
 
             updateCommand.ExecuteNonQuery();
 

@@ -21,9 +21,14 @@ namespace AM_Data
             Accounts = accountData.GetAccount();
         }
 
-        public void registerAccount(SISAccount account)
+        public void registerAccount(SISAccount RAsisAccount)
         {
-            _accountData.SaveAccounts(account);
+            _accountData.SaveAccounts(RAsisAccount);
+        }
+
+        public void updateAccount(SISAccount UAsisAccount)
+        {
+            _accountData.UpdateAccounts(UAsisAccount);
         }
 
 
