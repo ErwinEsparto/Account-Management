@@ -5,29 +5,27 @@ namespace AM_Rules
 {
     public class RecoverRules
     {
-        public SISAccountDataService sisdata;
+        private SISAccountDataService sisdata;
         public RecoverRules()
-        {
-            sisdata = new SISAccountDataService(new SQLData());
-        }
+        { sisdata = new SISAccountDataService(new SQLData()); }
 
-        public SISAccount FindAccountByEmail(string sisEmail)
+        public SISAccount FindAccountByEmail(string sisEmail, SISType type)
         {
             var Accounts = sisdata.GetAccounts();
             foreach (var account in Accounts)
             {
-                if (account.EmailAddress == sisEmail)
+                if (account.EmailAddress == sisEmail && account.Type == type)
                 { return account; }
             }
             return null;
         }
 
-        public bool RecoverSISAccountByEmail(string sisEmail, string newPassword, string newPassword2)
+        public bool RecoverSISAccountByEmail(string sisEmail, string newPassword, string newPassword2, SISType type)
         {
             var Accounts = sisdata.GetAccounts();
             foreach (var account in Accounts)
             {
-                if (account.EmailAddress == sisEmail)
+                if (account.EmailAddress == sisEmail && account.Type == type)
                 {
                     if (newPassword == newPassword2)
                     {

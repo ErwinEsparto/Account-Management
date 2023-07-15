@@ -35,7 +35,7 @@ namespace AM_UI
                             Register(status);
                             break;
                         case 3:
-                            string isRecoverSuccess = Recover();
+                            string isRecoverSuccess = Recover(status);
                             Console.WriteLine(isRecoverSuccess);
                             break;
                         default:
@@ -90,6 +90,7 @@ namespace AM_UI
                 SISAccount account = login.Login(username, password, accountType);
                 return account != null ? true : false;
             }
+
             void Register(int type)
             {
                 SISType accountType;
@@ -118,12 +119,13 @@ namespace AM_UI
                 register.CreateAccount(username, email, password, accountType);
                 Console.WriteLine("Successfully Registered.");
             }
-            string Recover()
+            string Recover(int type)
             {
+                SISType accountType = type == 1 ? SISType.Student : SISType.Faculty;
                 Console.WriteLine("\nRecovering Account...");
                 Console.Write("Please enter your email: ");
                 string email = Console.ReadLine();
-                SISAccount account = recover.FindAccountByEmail(email);
+                SISAccount account = recover.FindAccountByEmail(email, accountType);
 
                 if (account != null)
                 {
@@ -132,11 +134,9 @@ namespace AM_UI
                     string newPassword = Console.ReadLine();
                     Console.Write("Type your new password again: ");
                     string newPassword2 = Console.ReadLine();
-                    bool result = recover.RecoverSISAccountByEmail(email, newPassword, newPassword2);
-                    
-                    if(result == true)
-                    { return "Successfully recovered your account."; }
-                    else { return "Password are not the same."; }
+
+                    bool result = recover.RecoverSISAccountByEmail(email, newPassword, newPassword2, accountType);
+                    return result == true ? "Successfully recovered your account." : "Password are not the same.";
                 }
                 else
                 { return "Account not found."; }
