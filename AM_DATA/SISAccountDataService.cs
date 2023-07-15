@@ -4,11 +4,16 @@ namespace AM_Data
 {
     public class SISAccountDataService
     {
-        //private static InMemorySISData sisdata = new InMemorySISData();
-        //private List<SISAccount> Accounts = sisdata.GetList();
+        
         private List<SISAccount> Accounts { get; set; }
+        private static InMemorySISData sisdata;
         IAccountData _accountData;
-        public SISAccountDataService() { }
+
+        public SISAccountDataService()
+        {
+            sisdata = new InMemorySISData();
+            Accounts = sisdata.GetList();
+        }
         public SISAccountDataService(IAccountData accountData)
         {
             _accountData = accountData;
@@ -18,8 +23,9 @@ namespace AM_Data
 
         public void registerAccount(SISAccount account)
         {
-            _accountData.UpdateAccounts(account);
+            _accountData.SaveAccounts(account);
         }
+
 
         public List<SISAccount> GetAccounts()
         { return Accounts; }
