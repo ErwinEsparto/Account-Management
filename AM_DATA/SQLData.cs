@@ -40,10 +40,10 @@ namespace AM_Data
                     EmailAddress = reader["SISEmail"].ToString(),
                     Password = reader["SISPassword"].ToString(),
                     DateCreated = Convert.ToDateTime(reader["SISDateCreated"]),
-                    DateModified = Convert.ToDateTime(reader["SISDataModified"]),
+                    DateModified = Convert.ToDateTime(reader["SISDateModified"]),
               
                     //Type = Enum.Parse(SISType, reader["SISPassword"].ToString()),
-                    //Type = reader["AccountType"].ToString(),
+                    //Type = Parse(Type SISType, reader["AccountType"]).ToString()
                 });
             }
 
@@ -78,10 +78,10 @@ namespace AM_Data
         {
             sqlConnection.Open();
 
-            var updateStatement = $"UPDATE SISAccount SET SISPassword = @SISPassword WHERE SISEmail = @SISEmail";
+            var updateStatement = $"UPDATE Account SET SISPassword = @SISPassword WHERE SISEmail = @SISEmail";
             SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
             updateCommand.Parameters.AddWithValue("@SISPassword", Account.Password);
-            updateCommand.Parameters.AddWithValue("@SISSEmail", Account.EmailAddress);
+            updateCommand.Parameters.AddWithValue("@SISEmail", Account.EmailAddress);
 
             updateCommand.ExecuteNonQuery();
 

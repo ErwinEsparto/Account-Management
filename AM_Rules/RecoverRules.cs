@@ -30,6 +30,7 @@ namespace AM_Rules
                     if (newPassword == newPassword2)
                     {
                         account.Password = newPassword;
+                        sisdata.updateAccount(account);
                         return true;
                     }
                 }

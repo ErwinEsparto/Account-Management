@@ -26,12 +26,6 @@ namespace AM_Data
             _accountData.SaveAccounts(RAsisAccount);
         }
 
-        public void updateAccount(SISAccount UAsisAccount)
-        {
-            _accountData.UpdateAccounts(UAsisAccount);
-        }
-
-
         public List<SISAccount> GetAccounts()
         { return Accounts; }
 
@@ -46,6 +40,10 @@ namespace AM_Data
                 { return account; }
             }
             return new SISAccount();
+        }
+        public void updateAccount(SISAccount UAsisAccount)
+        {
+            _accountData.UpdateAccounts(UAsisAccount);
         }
     }
 }
