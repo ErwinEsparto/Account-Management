@@ -1,58 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using AM_Rules;
+﻿using AM_Rules;
 using AM_Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AM_UI
 {
-    internal class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
             LoginRules login = new LoginRules();
             RegisterRules register = new RegisterRules();
             RecoverRules recover = new RecoverRules();
-            SISAccount account;
-            SISType accountType;
-            int status;
-            string ifSuccess;
 
-            do
+            int status = ShowOptions();
+            bool isLoginSuccess;
+            switch (status)
             {
-                status = ShowOptions();
-                switch (status)
-                {
-                    case 0: break;
-                    case 1:
-                    case 2:
-                        int action = ShowForm();
-                        switch (action)
-                        {
-                            case 1:
-                                ifSuccess = Login(status);
-                                Console.WriteLine(ifSuccess);
-                                break;
-                            case 2:
-                                Register(status);
-                                break;
-                            case 3:
-                                ifSuccess = Recover();
-                                Console.WriteLine(ifSuccess);
-                                break;
-                            default:
-                                Console.WriteLine("Incorrent Input.");
-                                break;
-                        }
+                case 0: break;
+                case 1:
+                case 2:
+                    int action = ShowForm();
+                    switch (action)
+                    {
+                        case 1:
+                            isLoginSuccess = Login(status);
+                            if (isLoginSuccess == true && status == 1)
+                            { Console.WriteLine("Successful Login. Show Student Profile here."); }
+                            else if (isLoginSuccess == true && status == 2)
+                            { Console.WriteLine("Successful Login. Show Faculty Profile here."); }
+                            else
+                            { Console.WriteLine("Incorrect Credentials."); }
+                            break;
+                        case 2:
+                            Register(status);
+                            break;
+                        case 3:
+                            string isRecoverSuccess = Recover();
+                            Console.WriteLine(isRecoverSuccess);
+                            break;
+                        default:
+                            Console.WriteLine("Incorrent Input.");
                         break;
-                    case 3:
-                        ifSuccess = Login(status);
-                        Console.WriteLine(ifSuccess);
-                        break;
-                    default:
-                        Console.WriteLine("Incorrect input.");
-                        break;
-                }
-            } while (status != 0);
+                    }
+                break;
+                case 3:
+                    isLoginSuccess = Login(status);
+                    if (isLoginSuccess == true && status == 3)
+                    { Console.WriteLine("Successful Login. Show Admin Profile here."); }
+                    else
+                    { Console.WriteLine("Incorrect Credentials."); }
+                    break;
+                default:
+                    Console.WriteLine("Incorrect input.");
+                break;
+            }
 
             int ShowOptions()
             {
@@ -76,29 +77,22 @@ namespace AM_UI
                 Console.Write("Input: ");
                 return Convert.ToInt32(Console.ReadLine());
             }
-            string Login(int type)
+            bool Login(int type)
             {
-                if (type == 1)
-                { accountType = SISType.Student; }
-                else if (type == 2)
-                { accountType = SISType.Faculty; }
-                else
-                { accountType = SISType.Admin; }
-
+                SISType accountType = type == 1 ? SISType.Student : type == 2 ? SISType.Faculty : SISType.Admin;
+                
                 Console.WriteLine("\nEnter the following information: ");
                 Console.Write("Account number: ");
                 string username = Console.ReadLine();
                 Console.Write("Password: ");
                 string password = Console.ReadLine();
-                account = login.Login(username, password, accountType);
 
-                if (account != null)
-                { return "Successful Login."; }
-                else
-                { return "Incorrect Credentials."; }
+                SISAccount account = login.Login(username, password, accountType);
+                return account != null ? true : false;
             }
             void Register(int type)
             {
+                SISType accountType;
                 string username, password, email;
                 bool format;
                 Console.WriteLine("\nCreating new account...");
@@ -129,7 +123,7 @@ namespace AM_UI
                 Console.WriteLine("\nRecovering Account...");
                 Console.Write("Please enter your email: ");
                 string email = Console.ReadLine();
-                account = recover.FindAccountByEmail(email);
+                SISAccount account = recover.FindAccountByEmail(email);
 
                 if (account != null)
                 {

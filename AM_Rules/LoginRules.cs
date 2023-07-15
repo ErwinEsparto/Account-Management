@@ -5,49 +5,41 @@ namespace AM_Rules
 {
     public class LoginRules
     {
-        public SISAccountDataService sisdata;
-        public LoginRules()
-        {
-            sisdata = new SISAccountDataService(new SQLData());
-        }
+        private SISAccountDataService sisdata;
 
+        public LoginRules()
+        { sisdata = new SISAccountDataService(); }
 
         public SISAccount Login(string username, string password, SISType type)
         {
-            SISAccount account = CheckAccount(username, password, type);
+            SISAccount account = FindAccount(username, password, type);
             return account;
         }
-        private SISAccount CheckAccount(string username, string password, SISType type)
+        private SISAccount FindAccount(string username, string password, SISType type)
         {
             List<SISAccount> accounts = GetSISAccountByType(type);
-            SISAccount foundAccount = new SISAccount();
 
-            var findaccount = (from account in accounts
-                               where
-                               account.SISAccountNumber.Equals(username) &&
-                               account.Password.Equals(password) &&
-                               account.Type.Equals(type)
-                               select account).FirstOrDefault();
-
-            if (findaccount != null)
+            foreach(var account in accounts)
             {
-                foundAccount = findaccount;
-                return foundAccount;
+                if(account.SISAccountNumber == username && account.Password == password && account.Type == type)
+                {
+                    SISAccount foundAccount = account;
+                    return foundAccount;
+                }
             }
-            else { return null; }
+            return null;
         }
         private List<SISAccount> GetSISAccountByType(SISType type)
         {
-            List<SISAccount> allaccounts = sisdata.GetAccounts();
-            List<SISAccount> accountsByType = new List<SISAccount>();
+            List<SISAccount> SISAccounts = sisdata.GetAccounts();
+            List<SISAccount> AccountsByType = new List<SISAccount>();
 
-            foreach (var account in allaccounts)
+            foreach (var account in SISAccounts)
             {
                 if (account.Type == type)
-                { accountsByType.Add(account); }
+                { AccountsByType.Add(account); }
             }
-            return accountsByType;
+            return AccountsByType;
         }
     }
 }
-
