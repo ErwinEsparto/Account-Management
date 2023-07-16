@@ -14,14 +14,10 @@ namespace AM_Data
 
         static SqlConnection sqlConnection;
 
-        //public SISAccountDataService sisAccountDataService = new SISAccountDataService();
-
         public SQLData()
         {
             sqlConnection = new SqlConnection(connectionString);
         }
-
-
         public List<SISAccount> GetAccount()
         {
             var selectStatement = "SELECT * FROM Account";
@@ -36,14 +32,13 @@ namespace AM_Data
             {
                 SISAccounts.Add(new SISAccount
                 {
+
                     SISAccountNumber = reader["SISAccount"].ToString(),
                     EmailAddress = reader["SISEmail"].ToString(),
                     Password = reader["SISPassword"].ToString(),
                     DateCreated = Convert.ToDateTime(reader["SISDateCreated"]),
                     DateModified = Convert.ToDateTime(reader["SISDateModified"]),
-              
-                    //Type = Enum.Parse(SISType, reader["SISPassword"].ToString()),
-                    //Type = Parse(Type SISType, reader["AccountType"]).ToString()
+                    Type = reader["SISAccountType"].ToString() == "Student" ? SISType.Student : reader["SISAccountType"].ToString() == "Faculty" ? SISType.Faculty : SISType.Admin,
                 });
             }
 
@@ -57,7 +52,7 @@ namespace AM_Data
         {
 
             var insertStatement = "INSERT INTO Account VALUES " +
-                "(@SISAccount, @SISEmail, @SISPassword, @SISDateCreated, @SISDateModified, @SISType)";
+                "(@SISAccount, @SISEmail, @SISPassword, @SISDateCreated, @SISDateModified, @SISAccountType)";
 
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
@@ -66,7 +61,7 @@ namespace AM_Data
             insertCommand.Parameters.AddWithValue("@SISPassword", Accounts.Password);
             insertCommand.Parameters.AddWithValue("@SISDateCreated", Accounts.DateCreated);
             insertCommand.Parameters.AddWithValue("@SISDateModified", Accounts.DateModified);
-            insertCommand.Parameters.AddWithValue("@SISType", Accounts.Type);
+            insertCommand.Parameters.AddWithValue("@SISAccountType", Accounts.Type == SISType.Student ? "Student" : Accounts.Type == SISType.Faculty ? "Faculty" : "Admin");
 
             sqlConnection.Open();
             insertCommand.ExecuteNonQuery();
