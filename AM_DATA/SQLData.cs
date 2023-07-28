@@ -10,7 +10,7 @@ namespace AM_Data
 {
     public class SQLData : IAccountData
     {
-        static string connectionString = "Data Source=DESKTOP-C0CK3NP\\SQLEXPRESS; Initial Catalog = Accounts; Integrated Security = True;";
+        static string connectionString = "Data Source=DESKTOP-1LU4ECR\\SQLEXPRESS; Initial Catalog = Accounts; Integrated Security = True;";
 
         static SqlConnection sqlConnection;
 
@@ -90,11 +90,6 @@ namespace AM_Data
             var deleteStatement = "DELETE FROM Account WHERE SISAccount = @SISAccount";
             SqlCommand deleteCommand = new SqlCommand(deleteStatement, sqlConnection);
             deleteCommand.Parameters.AddWithValue("@SISAccount", Account.SISAccountNumber);
-            deleteCommand.Parameters.AddWithValue("@SISEmail", Account.EmailAddress);
-            deleteCommand.Parameters.AddWithValue("@SISPassword", Account.Password);
-            deleteCommand.Parameters.AddWithValue("@SISDateCreated", Account.DateCreated);
-            deleteCommand.Parameters.AddWithValue("@SISDateModified", Account.DateModified);
-            deleteCommand.Parameters.AddWithValue("@SISAccountType", Account.Type);
 
             deleteCommand.ExecuteNonQuery();
 

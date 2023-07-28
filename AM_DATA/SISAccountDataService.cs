@@ -20,6 +20,11 @@ namespace AM_Data
             _accountData.SaveAccounts(RAsisAccount);
         }
 
+        public void DeleteAccount(SISAccount account)
+        {
+            _accountData.DeleteAccount(account);
+        }
+
         public List<SISAccount> GetAccounts()
         { return Accounts; }
 

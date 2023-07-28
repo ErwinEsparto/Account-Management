@@ -11,6 +11,7 @@ namespace AM_UI
             LoginRules login = new LoginRules();
             RegisterRules register = new RegisterRules();
             RecoverRules recover = new RecoverRules();
+            AdminRules admin = new AdminRules();
 
             int status = ShowOptions();
             bool isLoginSuccess;
@@ -46,9 +47,35 @@ namespace AM_UI
                 case 3:
                     isLoginSuccess = Login(status);
                     if (isLoginSuccess == true && status == 3)
-                    { Console.WriteLine("Successful Login. Show Admin Profile here."); }
+                    { Console.WriteLine("Successful Login."); }
                     else
-                    { Console.WriteLine("Incorrect Credentials."); }
+                    { 
+                        Console.WriteLine("Incorrect Credentials.");
+                        break;
+                    }
+
+                    int adminAction = ShowAdminForm();
+                    switch (adminAction)
+                    {
+                        case 1:
+                        case 2:
+                            GetAccounts(adminAction);
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            Console.Write("\nEnter the account number: ");
+                            string accountNumber = Console.ReadLine();
+                            bool isDeleteSuccess = DeleteAccount(accountNumber);
+                            if (isDeleteSuccess == true)
+                            { Console.WriteLine("Successfully deleted account."); }
+                            else
+                            { Console.WriteLine("Account not found."); }
+                            break;
+                        default:
+                            Console.WriteLine("Incorrect input.");
+                            break;
+                    }
                     break;
                 default:
                     Console.WriteLine("Incorrect input.");
@@ -77,6 +104,16 @@ namespace AM_UI
                 Console.Write("Input: ");
                 return Convert.ToInt32(Console.ReadLine());
             }
+            int ShowAdminForm()
+            {
+                Console.WriteLine("\nPlease choose an action: ");
+                Console.WriteLine("[1]View student accounts");
+                Console.WriteLine("[2]View faculty accounts");
+                Console.WriteLine("[3]Search an account");
+                Console.WriteLine("[4]Delete an account");
+                Console.Write("Input: ");
+                return Convert.ToInt32(Console.ReadLine());
+            }
             bool Login(int type)
             {
                 SISType accountType = type == 1 ? SISType.Student : type == 2 ? SISType.Faculty : SISType.Admin;
@@ -90,7 +127,6 @@ namespace AM_UI
                 SISAccount account = login.Login(username, password, accountType);
                 return account != null ? true : false;
             }
-
             void Register(int type)
             {
                 SISType accountType;
@@ -140,6 +176,23 @@ namespace AM_UI
                 }
                 else
                 { return "Account not found."; }
+            }
+            void GetAccounts(int adminAction)
+            {
+                SISType accountType = adminAction == 1 ? SISType.Student : SISType.Faculty;
+                List<SISAccount> students = admin.GetAccounts(accountType);
+                foreach (SISAccount student in students)
+                {
+                    Console.WriteLine("\nAccount Number: " + student.SISAccountNumber);
+                    Console.WriteLine("Email Address: " + student.EmailAddress);
+                    Console.WriteLine("Date Created: " + student.DateCreated);
+                    Console.WriteLine("Date Modified: " + student.DateModified);
+                }
+            }
+            bool DeleteAccount(string accountNumber)
+            {
+                bool result = admin.DeleteAccount(accountNumber);
+                return result;
             }
         }
     }
