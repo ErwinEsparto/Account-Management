@@ -82,5 +82,23 @@ namespace AM_Data
 
             sqlConnection.Close();
         }
+
+        public void DeleteAccount(SISAccount Account)
+        {
+            sqlConnection.Open();
+
+            var deleteStatement = "DELETE FROM Account WHERE SISAccount = @SISAccount";
+            SqlCommand deleteCommand = new SqlCommand(deleteStatement, sqlConnection);
+            deleteCommand.Parameters.AddWithValue("@SISAccount", Account.SISAccountNumber);
+            deleteCommand.Parameters.AddWithValue("@SISEmail", Account.EmailAddress);
+            deleteCommand.Parameters.AddWithValue("@SISPassword", Account.Password);
+            deleteCommand.Parameters.AddWithValue("@SISDateCreated", Account.DateCreated);
+            deleteCommand.Parameters.AddWithValue("@SISDateModified", Account.DateModified);
+            deleteCommand.Parameters.AddWithValue("@SISAccountType", Account.Type);
+
+            deleteCommand.ExecuteNonQuery();
+
+            sqlConnection.Close();
+        }
     }
 }
