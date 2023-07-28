@@ -49,28 +49,27 @@ namespace AM_UI
                     if (isLoginSuccess == true && status == 3)
                     { Console.WriteLine("Successful Login."); }
                     else
-                    { 
-                        Console.WriteLine("Incorrect Credentials.");
-                        break;
-                    }
+                    { Console.WriteLine("Incorrect Credentials."); break; }
 
                     int adminAction = ShowAdminForm();
                     switch (adminAction)
                     {
                         case 1:
                         case 2:
-                            GetAccounts(adminAction);
+                            ViewAccounts(adminAction);
                             break;
                         case 3:
+                            Console.WriteLine("\nSearching account...");
+                            Console.Write("Enter the account number: ");
+                            string SearchAccountNumber = Console.ReadLine();
+                            SearchAccount(SearchAccountNumber);
                             break;
                         case 4:
-                            Console.Write("\nEnter the account number: ");
-                            string accountNumber = Console.ReadLine();
-                            bool isDeleteSuccess = DeleteAccount(accountNumber);
-                            if (isDeleteSuccess == true)
-                            { Console.WriteLine("Successfully deleted account."); }
-                            else
-                            { Console.WriteLine("Account not found."); }
+                            Console.WriteLine("\nWARNING! Deleting account...");
+                            Console.Write("Enter the account number: ");
+                            string DeleteAccountNumber = Console.ReadLine();
+                            string isDeleteSuccess = DeleteAccount(DeleteAccountNumber);
+                            Console.WriteLine(isDeleteSuccess);
                             break;
                         default:
                             Console.WriteLine("Incorrect input.");
@@ -177,22 +176,43 @@ namespace AM_UI
                 else
                 { return "Account not found."; }
             }
-            void GetAccounts(int adminAction)
+            void ViewAccounts(int adminAction)
             {
                 SISType accountType = adminAction == 1 ? SISType.Student : SISType.Faculty;
-                List<SISAccount> students = admin.GetAccounts(accountType);
-                foreach (SISAccount student in students)
+                List<SISAccount> accounts = admin.GetAccounts(accountType);
+                foreach (SISAccount account in accounts)
                 {
-                    Console.WriteLine("\nAccount Number: " + student.SISAccountNumber);
-                    Console.WriteLine("Email Address: " + student.EmailAddress);
-                    Console.WriteLine("Date Created: " + student.DateCreated);
-                    Console.WriteLine("Date Modified: " + student.DateModified);
+                    Console.WriteLine("\nAccount Number: " + account.SISAccountNumber);
+                    Console.WriteLine("Email Address: " + account.EmailAddress);
+                    Console.WriteLine("Date Created: " + account.DateCreated);
+                    Console.WriteLine("Date Modified: " + account.DateModified);
                 }
             }
-            bool DeleteAccount(string accountNumber)
+            void SearchAccount(string accountNumber)
+            {
+                SISAccount account = admin.SearchAccount(accountNumber);
+                if (account != null)
+                {
+                    Console.WriteLine("\nAccount Found!");
+                    Console.WriteLine("Account Number: " + account.SISAccountNumber);
+                    Console.WriteLine("Email Address: " + account.EmailAddress);
+                    Console.WriteLine("Account Type: " + account.Type);
+                    Console.WriteLine("Date Created: " + account.DateCreated);
+                    Console.WriteLine("Date Modified: " + account.DateModified);
+                }
+                else
+                {
+                    Console.WriteLine("Account not found.");
+                }
+            }
+            string DeleteAccount(string accountNumber)
             {
                 bool result = admin.DeleteAccount(accountNumber);
-                return result;
+
+                if (result == true)
+                { return "Successfully deleted account."; }
+                else
+                { return "Account not found."; }
             }
         }
     }

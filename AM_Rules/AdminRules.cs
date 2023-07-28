@@ -29,10 +29,17 @@ namespace AM_Rules
 
             foreach (SISAccount account in accounts)
             {
-                if (account.Type == SISType.Faculty)
+                if (account.SISAccountNumber == accountnumber)
                 {
-                    SISAccount foundAccount = account;
-                    return foundAccount;
+                    if (account.Type == SISType.Student || account.Type == SISType.Faculty)
+                    {
+                        SISAccount foundAccount = account;
+                        return foundAccount;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             return null;
@@ -45,9 +52,16 @@ namespace AM_Rules
             {
                 if (account.SISAccountNumber == accountnumber)
                 {
-                    SISAccount foundAccount = account;
-                    sisdata.DeleteAccount(foundAccount);
-                    return true;
+                    if(account.Type == SISType.Student || account.Type == SISType.Faculty)
+                    {
+                        SISAccount foundAccount = account;
+                        sisdata.DeleteAccount(foundAccount);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             return false;
