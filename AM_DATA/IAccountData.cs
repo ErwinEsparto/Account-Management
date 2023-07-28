@@ -12,5 +12,6 @@ namespace AM_Data
         List<SISAccount> GetAccount();
         void SaveAccounts(SISAccount Accounts);
         void UpdateAccounts(SISAccount Account);
+        void DeleteAccount(SISAccount Account);
     }
 }
