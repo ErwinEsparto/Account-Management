@@ -9,9 +9,17 @@ namespace AM_Rules
         public RegisterRules()
         { sisdata = new SISAccountDataService(new SQLData()); }
 
-        public void CreateAccount(string username, string email, string password, SISType accountType)
+        public bool CreateAccount(string username, string email, string password, SISType accountType)
         {
-            SISAccount account = new SISAccount()
+            List<SISAccount> accounts = sisdata.GetAccounts();
+            foreach (SISAccount account in accounts) 
+            {
+                if(account.SISAccountNumber == username || account.EmailAddress == email)
+                {
+                    return false;
+                }
+            }
+            SISAccount NewAccount = new SISAccount()
             {
                 SISAccountNumber = username,
                 EmailAddress = email,
@@ -20,8 +28,8 @@ namespace AM_Rules
                 DateCreated = DateTime.Now,
                 DateModified = DateTime.Now
             };
-            sisdata.registerAccount(account);
-            
+            sisdata.registerAccount(NewAccount);
+            return true;
         }
         public bool CheckFormat(string username, SISType type)
         {

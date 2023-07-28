@@ -33,7 +33,8 @@ namespace AM_UI
                             { Console.WriteLine("Incorrect Credentials."); }
                             break;
                         case 2:
-                            Register(status);
+                            string isRegisterSuccess = Register(status);
+                            Console.Write(isRegisterSuccess);
                             break;
                         case 3:
                             string isRecoverSuccess = Recover(status);
@@ -126,17 +127,12 @@ namespace AM_UI
                 SISAccount account = login.Login(username, password, accountType);
                 return account != null ? true : false;
             }
-            void Register(int type)
+            string Register(int type)
             {
-                SISType accountType;
+                SISType accountType = type == 1 ? SISType.Student : SISType.Faculty; ;
                 string username, password, email;
                 bool format;
                 Console.WriteLine("\nCreating new account...");
-
-                if (type == 1)
-                { accountType = SISType.Student; }
-                else
-                { accountType = SISType.Faculty; }
 
                 do
                 {
@@ -150,9 +146,16 @@ namespace AM_UI
                 email = Console.ReadLine();
                 Console.Write("Password: ");
                 password = Console.ReadLine();
-                
-                register.CreateAccount(username, email, password, accountType);
-                Console.WriteLine("Successfully Registered.");
+
+                if (email.IsNullOrEmpty() || password.IsNullOrEmpty())
+                {
+                    return "Some fields cannot be empty.";
+                }
+                else
+                {
+                    bool result = register.CreateAccount(username, email, password, accountType);
+                    return result == true ? "Successfully Registered." : "A field is already taken.";
+                }
             }
             string Recover(int type)
             {
