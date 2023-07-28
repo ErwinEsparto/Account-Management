@@ -21,7 +21,6 @@ namespace AM_Rules
                 DateModified = DateTime.Now
             };
             sisdata.registerAccount(account);
-            sisdata.AddAccount(account);
             
         }
         public bool CheckFormat(string username, SISType type)

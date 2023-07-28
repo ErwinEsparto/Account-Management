@@ -23,8 +23,6 @@ namespace AM_Data
         public List<SISAccount> GetAccounts()
         { return Accounts; }
 
-        public void AddAccount(SISAccount newAccount)
-        { Accounts.Add(newAccount); }
 
         public SISAccount GetSISAccountByNumber(string sisNumber)
         {
